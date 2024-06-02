@@ -77,6 +77,7 @@
             this.Forward.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.Forward.TabIndex = 1;
             this.Forward.TabStop = false;
+            this.Forward.Click += new System.EventHandler(this.Forward_Click);
             // 
             // Refresh
             // 
@@ -87,6 +88,7 @@
             this.Refresh.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.Refresh.TabIndex = 2;
             this.Refresh.TabStop = false;
+            this.Refresh.Click += new System.EventHandler(this.Refresh_Click);
             // 
             // Back
             // 
@@ -97,6 +99,7 @@
             this.Back.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.Back.TabIndex = 0;
             this.Back.TabStop = false;
+            this.Back.Click += new System.EventHandler(this.Back_Click);
             // 
             // AddressBar
             // 
@@ -110,6 +113,7 @@
             this.AddressBar.Size = new System.Drawing.Size(1868, 50);
             this.AddressBar.TabIndex = 3;
             this.AddressBar.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.AddressBar.KeyDown += new System.Windows.Forms.KeyEventHandler(this.AddressBar_KeyDown);
             // 
             // Form1
             // 
@@ -121,6 +125,7 @@
             this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "Form1";
             this.Text = "WWeb Browser";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.panel1.ResumeLayout(false);

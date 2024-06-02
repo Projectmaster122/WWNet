@@ -33,9 +33,7 @@ namespace WWNet_Browser
         {
             InitializeComponent();
             AddressBar.Width = this.ClientSize.Width - AddressBar.Left - AddressBarPadding; // keep a right margin on address bar when resizing window
-            b = new Browser(Page);
-            b.Navigate("F:\\Coding\\New\\WWebSample"); //hardcoded rn for local testing
-            //im adding actual browsing soon so will remove 
+            b = new Browser(Page, AddressBar, this);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -51,6 +49,35 @@ namespace WWNet_Browser
         private void Form1_Resize(object sender, EventArgs e)
         {
             AddressBar.Width = this.ClientSize.Width - AddressBar.Left - AddressBarPadding; // keep a right margin on address bar when resizing window
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            string localSave = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/" + "WWNet";
+            if (Directory.Exists(localSave)) Directory.Delete(localSave, true);
+        }
+
+        private void AddressBar_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyData == Keys.Enter)
+            {
+                b.Navigate(AddressBar.Text);
+            }
+        }
+
+        private void Back_Click(object sender, EventArgs e)
+        {
+            b.Back();
+        }
+
+        private void Forward_Click(object sender, EventArgs e)
+        {
+            b.Forward();
+        }
+
+        private void Refresh_Click(object sender, EventArgs e)
+        {
+            b.Refresh();
         }
     }
 }
