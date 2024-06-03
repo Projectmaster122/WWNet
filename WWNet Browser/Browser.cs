@@ -254,6 +254,12 @@ namespace WWNet_Browser
             catch { }
             //temporary
             //path += "/main.whtml";
+            //make this look nicer lol
+            if (AddressBar.Text.EndsWith(".whtml"))
+                AddressBar.Text = AddressBar.Text.Substring(0, AddressBar.Text.Length - 6);
+            if (AddressBar.Text.EndsWith("main"))
+                AddressBar.Text = AddressBar.Text.Substring(0, AddressBar.Text.Length - 4);
+            AddressBar.Text = "whttp://"+AddressBar.Text;
             Page.Controls.Clear();
             //fix weird
             AddressBar.Select(0, 0);
