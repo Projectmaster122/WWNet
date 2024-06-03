@@ -99,6 +99,8 @@ namespace WWNet_Browser
         string currentDomain = "";
         public void Navigate(string site, bool pushHistory = true)
         {
+            if (site.StartsWith("whttp://")) site = site.Substring(8);
+            if(site.StartsWith("www.")) site=site.Substring(4);
             if(pushHistory) historyIndex++;
             /*
             if (!File.Exists(path))
@@ -257,8 +259,8 @@ namespace WWNet_Browser
             //make this look nicer lol
             if (AddressBar.Text.EndsWith(".whtml"))
                 AddressBar.Text = AddressBar.Text.Substring(0, AddressBar.Text.Length - 6);
-            if (AddressBar.Text.EndsWith("main"))
-                AddressBar.Text = AddressBar.Text.Substring(0, AddressBar.Text.Length - 4);
+            if (AddressBar.Text.EndsWith("/main"))
+                AddressBar.Text = AddressBar.Text.Substring(0, AddressBar.Text.Length - 5);
             AddressBar.Text = "whttp://"+AddressBar.Text;
             Page.Controls.Clear();
             //fix weird
