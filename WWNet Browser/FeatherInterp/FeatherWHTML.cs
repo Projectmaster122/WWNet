@@ -9,7 +9,7 @@ namespace WWNet_Browser.FeatherInterp
 {
     public enum TagType
     {
-        h1, h2, div, text, h3, h4, h5, h6, p, b, s, i, u, button, input, a
+        h1, h2, div, text, h3, h4, h5, h6, p, b, s, i, u, button, input, a, include
     }
     public class Tag
     {
@@ -20,7 +20,7 @@ namespace WWNet_Browser.FeatherInterp
         public bool IsVoid = false;
         TagType[] VoidTags =
         {
-            TagType.input
+            TagType.input, TagType.include
         };
         public void Init(string t)
         {
@@ -133,7 +133,7 @@ namespace WWNet_Browser.FeatherInterp
 
                         AddChildToObjDom(objects.Peek(), curr);
                     }
-                    if(!t.IsVoid) objects.Push(curr);
+                    if(!t.IsVoid || t.Type == TagType.include) objects.Push(curr);
                     /*
                     if (t.opening) tags.Push(t);
                     else if (tags.Count > 0)

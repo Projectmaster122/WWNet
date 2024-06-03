@@ -125,6 +125,7 @@ namespace WWNet_Browser.FeatherRenderer
         }
         public static void Render(Panel page, List<WHTMLObject> dom, Browser b, Panel parent = null)
         {
+            List<string> wcssFiles = new List<string>(), wcsharpFiles = new List<string>();
             BrowserInstance = b;
             Page = page;
             if (parent == null) parent = page;
@@ -158,6 +159,10 @@ namespace WWNet_Browser.FeatherRenderer
                         break;
                     case TagType.input:
                         c = GenerateInput(node);
+                        break;
+                    case TagType.include:
+                        if (node.Attributes["type"].ToLower().Trim() == "wcss") wcssFiles.Add(node.Attributes["src"]);
+                        else if (node.Attributes["type"].ToLower().Trim() == "wcsharp") wcsharpFiles.Add(node.Attributes["src"]);
                         break;
                     default:
                         MessageBox.Show("cannot render type " + node.Type.ToString());

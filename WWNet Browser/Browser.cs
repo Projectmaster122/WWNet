@@ -14,6 +14,7 @@ using System.Text.Json.Nodes;
 using System.Security.Policy;
 using System.Runtime.Remoting.Contexts;
 using System.IO.Compression;
+using System.Text.RegularExpressions;
 
 namespace WWNet_Browser
 {
@@ -95,6 +96,7 @@ namespace WWNet_Browser
             historyIndex++;
             Navigate(history[historyIndex], false);
         }
+        string currentDomain = "";
         public void Navigate(string site, bool pushHistory = true)
         {
             if(pushHistory) historyIndex++;
@@ -140,16 +142,27 @@ namespace WWNet_Browser
                 }
                 file = path;
                 path = currentLocalDir + "/" + path;
+                while(path.Contains("../"))
+                {
+                    path = Regex.Replace(path, "[A-Za-z0-9]+/\\.\\./", "", RegexOptions.IgnoreCase);
+                }
                 if (!File.Exists(path)) { path += ".whtml"; file += ".whtml"; }
-                AddressBar.Text = new DirectoryInfo(currentLocalDir).Parent.Parent.Name + "/" + file;
+                currentLocalDir = Path.GetDirectoryName(path);
+                
                 if (!File.Exists(path))
                 {
                     MessageBox.Show("site " + site + " not found!");
                 }
-                else;
+                else
+                {
+                    file = Path.GetFileName(path);
+                    domain = currentDomain;
+                    AddressBar.Text = domain + "/" + file;
+                }
             }
             else
             {
+                currentDomain = domain;
                 file = (site.Contains("/") ? site.Substring(site.IndexOf('/') + 1) : String.Empty);
                 string localSave = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/" + "WWNet";
                 if(!Directory.Exists(localSave)) Directory.CreateDirectory(localSave);
@@ -157,17 +170,16 @@ namespace WWNet_Browser
                 if (!Directory.Exists(localSave)) 
                 {
                     Directory.CreateDirectory(localSave);
-                    //download site
-                    HttpClient h = new HttpClient();
-                    var zip = h.GetByteArrayAsync(DomainToGit[domain]).Result;
-                    File.WriteAllBytes(localSave + "/site.zip", zip);
-                    var zf = ZipFile.OpenRead(localSave + "/site.zip");
-                    zf.ExtractToDirectory(localSave + "/site");
-                    zf.Dispose();
                 }
                 
-                //else { Directory.Delete(localSave, true); Directory.CreateDirectory(localSave); }
-                
+                else { Directory.Delete(localSave, true); Directory.CreateDirectory(localSave); }
+                //download site
+                HttpClient h = new HttpClient();
+                var zip = h.GetByteArrayAsync(DomainToGit[domain]).Result;
+                File.WriteAllBytes(localSave + "/site.zip", zip);
+                var zf = ZipFile.OpenRead(localSave + "/site.zip");
+                zf.ExtractToDirectory(localSave + "/site");
+                zf.Dispose();
                 path = localSave + "/site";
                 path = Directory.GetDirectories(path)[0];
                 /*
