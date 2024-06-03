@@ -123,7 +123,7 @@ namespace WWNet_Browser.FeatherRenderer
                 if (attrib == "width") u.MaximumSize = new Size(int.Parse(obj.Attributes[attrib]), u.MaximumSize.Height);
             }
         }
-        public static void Render(Panel page, List<WHTMLObject> dom, Browser b, Panel parent = null)
+        public static void Render(Panel page, List<WHTMLObject> dom, Browser b, string currentLocalDir, Panel parent = null, bool bl = true)
         {
             List<string> wcssFiles = new List<string>(), wcsharpFiles = new List<string>();
             BrowserInstance = b;
@@ -153,7 +153,8 @@ namespace WWNet_Browser.FeatherRenderer
                     case TagType.div:
                         c = GenerateDiv(node);
                         break;
-
+                    case TagType.text:
+                        break;
                     case TagType.button:
                         c = GenerateButton(node);
                         break;
@@ -170,7 +171,26 @@ namespace WWNet_Browser.FeatherRenderer
                 }
                 ApplyAttributes(c, node);
                 AddToUI(c, parent);
-                Render(page, node.Children, b, c as Panel);
+                Render(page, node.Children, b, currentLocalDir, c as Panel, false);
+            }
+            if (!bl) return;
+            FeatherWCSS fc = new FeatherWCSS();
+            foreach(var wcss in wcssFiles)
+            {
+                var path = wcss;
+                if (path.StartsWith("./") || path.StartsWith(".\\"))
+                {
+                    var p = path.ToList();
+                    p.RemoveAt(0);
+                    path = new string(p.ToArray());
+                }
+                if (path.StartsWith("/") || path.StartsWith("\\"))
+                {
+                    var p = path.ToList();
+                    p.RemoveAt(0);
+                    path = new string(p.ToArray());
+                }
+                fc.run(conv, File.ReadAllText(currentLocalDir + "/" + wcss));
             }
         }
     }

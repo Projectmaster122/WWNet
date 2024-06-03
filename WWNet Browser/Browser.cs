@@ -27,7 +27,6 @@ namespace WWNet_Browser
     {
         //feel free to change this and make ur own wwnet, as long as it works and im not dumb
         const string domainsJsonUri = "https://raw.githubusercontent.com/usarana/whttp/main/websites.json";
-        Feather f;
         Panel Page;
         Form1 f1Instance;
         System.Windows.Forms.TextBox AddressBar;
@@ -41,7 +40,6 @@ namespace WWNet_Browser
             this.Page = Page;
             this.AddressBar = AddressBar;
             this.f1Instance = f1Instance;
-            f = new Feather();
             string domainsJsonRaw = String.Empty;
             HttpClient h = new HttpClient();
             domainsJsonRaw = h.GetStringAsync(domainsJsonUri).Result;
@@ -267,9 +265,8 @@ namespace WWNet_Browser
             AddressBar.Select(0, 0);
             f1Instance.ActiveControl = null;
             if(pushHistory) history.Add(AddressBar.Text);
-            Feather f = new Feather();
-            List<WHTMLObject> dom = f.wh.run(File.ReadAllText(path));
-            RenderDOM.Render(Page, dom, this);
+            List<WHTMLObject> dom = new FeatherWHTML().run(File.ReadAllText(path));
+            RenderDOM.Render(Page, dom, this, currentLocalDir);
         }
     }
 }
