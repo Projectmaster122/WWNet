@@ -142,10 +142,13 @@ namespace WWNet_Browser
                 }
                 file = path;
                 path = currentLocalDir + "/" + path;
+                /*
                 while(path.Contains("../"))
                 {
                     path = Regex.Replace(path, "[A-Za-z0-9]+/\\.\\./", "", RegexOptions.IgnoreCase);
                 }
+                */
+                
                 if (!File.Exists(path)) { path += ".whtml"; file += ".whtml"; }
                 currentLocalDir = Path.GetDirectoryName(path);
                 
@@ -155,16 +158,21 @@ namespace WWNet_Browser
                 }
                 else
                 {
-                    file = Path.GetFileName(path);
                     domain = currentDomain;
-                    AddressBar.Text = domain + "/" + file;
+                    string localSave = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/WWNet/" + domain + "/site";
+                    localSave = Directory.GetDirectories(localSave)[0] + "/";
+                    //fix different formatting for variables path and localSave
+                    path = new DirectoryInfo(path).FullName;
+                    localSave = new DirectoryInfo(localSave).FullName;
+                    file = path.Replace(localSave, "");
+                    AddressBar.Text = domain + "/" + file.Replace("\\", "/");
                 }
             }
             else
             {
                 currentDomain = domain;
                 file = (site.Contains("/") ? site.Substring(site.IndexOf('/') + 1) : String.Empty);
-                string localSave = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/" + "WWNet";
+                string localSave = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/WWNet";
                 if(!Directory.Exists(localSave)) Directory.CreateDirectory(localSave);
                 localSave += "/" + domain;
                 if (!Directory.Exists(localSave)) 
