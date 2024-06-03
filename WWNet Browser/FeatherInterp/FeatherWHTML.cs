@@ -24,7 +24,8 @@ namespace WWNet_Browser.FeatherInterp
         };
         public void Init(string t)
         {
-            if (t.Contains('/')) Closed = true;
+            string z = t.Trim();
+            if (z[1]=='/') Closed = true;
             List<char> t1;
             t1 = t.ToList();
             t1.RemoveAt(0);
@@ -125,9 +126,11 @@ namespace WWNet_Browser.FeatherInterp
                     if (objects.Count == 0)
                     {
                         dom.Add(curr);
+                        //objects.Push(curr);
                     }
                     else
                     {
+
                         AddChildToObjDom(objects.Peek(), curr);
                     }
                     if(!t.IsVoid) objects.Push(curr);
