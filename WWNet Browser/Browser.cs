@@ -44,13 +44,7 @@ namespace WWNet_Browser
             HttpClient h = new HttpClient();
             domainsJsonRaw = h.GetStringAsync(domainsJsonUri).Result;
             h.Dispose();
-            /*
-            Task.Run(async () => {
-                HttpClient h = new HttpClient();
-                domainsJsonRaw = await h.GetStringAsync(domainsJsonUri);
-                h.Dispose();
-            }).Wait();
-            */
+
             JsonNode j = JsonNode.Parse(domainsJsonRaw);
             var w = j["websites"].AsArray();
             foreach(var jsonNode in w)
@@ -63,19 +57,6 @@ namespace WWNet_Browser
                     jsonNode["git"]
                     .AsValue()
                     .ToString();
-                /*
-                domains.Add(
-                    new Website(
-                        jsonNode["domain"]
-                        .AsValue()
-                        .ToString(),
-
-                        jsonNode["git"]
-                        .AsValue()
-                        .ToString()
-                    )
-                );
-                */
             }
         }
         public void Refresh()
@@ -100,28 +81,7 @@ namespace WWNet_Browser
             if (site.StartsWith("whttp://")) site = site.Substring(8);
             if(site.StartsWith("www.")) site=site.Substring(4);
             if(pushHistory) historyIndex++;
-            /*
-            if (!File.Exists(path))
-            {
-                if (path.StartsWith("./") || path.StartsWith(".\\"))
-                {
-                    var p = path.ToList();
-                    p.RemoveAt(0);
-                    path = new string(p.ToArray());
-                }
-                if (path.StartsWith("/") || path.StartsWith("\\"))
-                {
-                    var p = path.ToList();
-                    p.RemoveAt(0);
-                    path = new string(p.ToArray());
-                }
-                MessageBox.Show(Directory.GetCurrentDirectory());
-                if (File.Exists(Directory.GetCurrentDirectory() + "/" + path)) path = Directory.GetCurrentDirectory() + path;
-                else if (File.Exists(Directory.GetCurrentDirectory() + "\\" + path)) path = Directory.GetCurrentDirectory() + path;
-                else if (File.Exists(Directory.GetCurrentDirectory() + path)) path = Directory.GetCurrentDirectory() + path;
-                else throw new FileNotFoundException(path);
-            }
-            */
+    
             string path = String.Empty;
             string file = String.Empty;
             string domain = (site.Contains("/")?site.Substring(0, site.IndexOf('/')):site);
@@ -142,12 +102,6 @@ namespace WWNet_Browser
                 }
                 file = path;
                 path = currentLocalDir + "/" + path;
-                /*
-                while(path.Contains("../"))
-                {
-                    path = Regex.Replace(path, "[A-Za-z0-9]+/\\.\\./", "", RegexOptions.IgnoreCase);
-                }
-                */
                 
                 if (!File.Exists(path)) { path += ".whtml"; file += ".whtml"; }
                 currentLocalDir = Path.GetDirectoryName(path);
@@ -190,34 +144,7 @@ namespace WWNet_Browser
                 zf.Dispose();
                 path = localSave + "/site";
                 path = Directory.GetDirectories(path)[0];
-                /*
-                if (path.StartsWith("./") || path.StartsWith(".\\"))
-                {
-                    var p = path.ToList();
-                    p.RemoveAt(0);
-                    path = new string(p.ToArray());
-                }
-                if (path.StartsWith("/") || path.StartsWith("\\"))
-                {
-                    var p = path.ToList();
-                    p.RemoveAt(0);
-                    path = new string(p.ToArray());
-                }
-                if (File.Exists(path)) { }
-                //else if (File.Exists(currentLocalDir + "\\" + path)) path = currentLocalDir + "\\" + path;
-                else if (File.Exists(currentLocalDir + "/" + path)) path = currentLocalDir + "/" + path;
-                //else if (File.Exists(currentLocalDir + path)) path = currentLocalDir + path;
-                //else if (File.Exists(path + "\\main.whtml")) path = path + "\\main.whtml";
-                else if (File.Exists(path + "/main.whtml")) path = path + "/main.whtml";
-                //else if (File.Exists(path + "main.whtml")) path = path + "main.whtml";
-                */ 
-
-                /* why is this in my code what drugs was i using when i wrote this what
-                else if (File.Exists(currentLocalDir + "\\main.whtml")) path = currentLocalDir + "\\main.whtml";
-                else if (File.Exists(currentLocalDir + "/main.whtml")) path = currentLocalDir + "/main.whtml";
-                else if (File.Exists(currentLocalDir + "main.whtml")) path = currentLocalDir + "main.whtml";
-                */
-                // else throw new FileNotFoundException();
+                
                 currentLocalDir = Path.GetDirectoryName(path);
                 try
                 {
@@ -239,11 +166,7 @@ namespace WWNet_Browser
                     }
                 }
                 catch { }
-                /*
-                else if (File.Exists(path + "\\index.whtml")) path = path + "\\index.whtml";
-                else if (File.Exists(path + "/index.whtml")) path = path + "/index.whtml";
-                else if (File.Exists(path + "index.whtml")) path = path + "index.whtml";
-                */
+
                 AddressBar.Text = domain + "/" + (file==String.Empty?"main.whtml":file);
             }
             try
@@ -252,8 +175,6 @@ namespace WWNet_Browser
                 else if (Directory.Exists(path)) path += "/" + file;
             }
             catch { }
-            //temporary
-            //path += "/main.whtml";
             //make this look nicer lol
             if (AddressBar.Text.EndsWith(".whtml"))
                 AddressBar.Text = AddressBar.Text.Substring(0, AddressBar.Text.Length - 6);
